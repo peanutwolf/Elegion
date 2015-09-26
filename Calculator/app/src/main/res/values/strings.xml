@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+
+        <string name="app_name">Calculator</string>
+
+        <string name="format_exсept">Wrong numbers</string>
+
+        <string name="calc_err">Calculation error</string>
+        <string name="unknown_op">Unknown operation</string>
+
+        <string name="action_settings">Settings</string>
+
+    </resources>
