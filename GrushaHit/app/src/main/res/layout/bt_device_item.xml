@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/padding_medium"
+    android:paddingLeft="@dimen/padding_medium"
+    tools:ignore="contentDescription">
+
+
+    <ImageView
+        android:id="@+id/img_bt_icon"
+        android:src="@drawable/ic_action"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:contentDescription="@string/app_icon"/>
+
+    <TextView
+        android:id="@+id/txt_bt_dev_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        tools:text="BT device"
+        android:layout_toRightOf="@+id/img_bt_icon"/>
+
+    <TextView
+        android:id="@+id/txt_bt_mac_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_vertical_small"
+        android:textStyle="normal"
+        android:textSize="12dp"
+        tools:text="MAC address"
+        android:layout_toRightOf="@+id/img_bt_icon"
+        android:layout_below="@id/txt_bt_dev_name"/>
+
+</RelativeLayout>
