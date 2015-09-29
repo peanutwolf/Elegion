@@ -1,13 +1,10 @@
 package com.vigursky.grushahit;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -15,9 +12,11 @@ import com.vigursky.grushahit.views.MainMenuFragment;
 
 import java.util.Set;
 
-public class GrushaMainActivity extends Activity {
+public class GrushaMainActivity extends ActionBarActivity {
 
     private static final String TAG = GrushaMainActivity.class.getSimpleName();
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,5 +41,6 @@ public class GrushaMainActivity extends Activity {
             super.onBackPressed();
         }
     }
+
 
 }

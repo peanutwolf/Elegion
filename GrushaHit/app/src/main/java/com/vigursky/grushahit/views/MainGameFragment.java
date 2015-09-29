@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -22,6 +24,7 @@ import com.vigursky.grushahit.R;
 public class MainGameFragment extends Fragment {
 
     private static final String TAG = MainGameFragment.class.getSimpleName();
+    private Toolbar toolbar;
 
     public MainGameFragment() {
         // Required empty public constructor
@@ -32,7 +35,7 @@ public class MainGameFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
 
-       // this.lockOrientation();
+        ((ActionBarActivity)getActivity()).getSupportActionBar().hide();
 
         return new MainGameSurface(getActivity().getApplicationContext());
     }
@@ -40,7 +43,8 @@ public class MainGameFragment extends Fragment {
     @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView");
-       // this.unlockOrientation();
+        ((ActionBarActivity)getActivity()).getSupportActionBar().show();
+
         super.onDestroyView();
     }
 

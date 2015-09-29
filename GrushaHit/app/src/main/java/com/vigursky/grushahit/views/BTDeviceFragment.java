@@ -1,10 +1,13 @@
 package com.vigursky.grushahit.views;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.ScanCallback;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -26,6 +29,7 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
     private BTDeviceAdapter btViewAdapter;
     private BluetoothAdapter mBluetoothAdapter;
 
+    private static final int REQUEST_ENABLE_BT = 1;
     private static final String TAG = BTDeviceFragment.class.getSimpleName();
 
     public BTDeviceFragment() {
@@ -46,10 +50,12 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
             return view;
         }
 
-        btViewAdapter = new BTDeviceAdapter(mBluetoothAdapter.getBondedDevices());
-        btViewAdapter.setOnItemClickListener(this);
-
-        btDevsView.setAdapter(btViewAdapter);
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }else{
+            initBTDevicesView();
+        }
 
         return view;
     }
@@ -59,7 +65,21 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
         Log.d(TAG, "Item clicked name = " + btDevice.getName());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_ENABLE_BT){
+            if (resultCode == Activity.RESULT_OK){
+                initBTDevicesView();
+            }
+        }
+    }
+
+    private void initBTDevicesView(){
+        btViewAdapter = new BTDeviceAdapter(mBluetoothAdapter.getBondedDevices());
+        btViewAdapter.setOnItemClickListener(this);
+
+        btDevsView.setAdapter(btViewAdapter);
+    }
+
 }
-
-
-
