@@ -2,13 +2,16 @@ package com.vigursky.grushahit.views;
 
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.le.ScanCallback;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
@@ -20,7 +23,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vigursky.grushahit.R;
+import com.vigursky.grushahit.services.BTService;
+import com.vigursky.grushahit.utils.BTDevicePipe;
 import com.vigursky.grushahit.views.adapters.BTDeviceAdapter;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PipedOutputStream;
+import java.util.UUID;
+
 
 
 public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItemClickListener {
@@ -28,12 +44,13 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
     private RecyclerView btDevsView;
     private BTDeviceAdapter btViewAdapter;
     private BluetoothAdapter mBluetoothAdapter;
+    private static ProgressDialog progressDialog;
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final String TAG = BTDeviceFragment.class.getSimpleName();
 
-    public BTDeviceFragment() {
-        // Required empty public constructor
+    public BTDeviceFragment(){
+
     }
 
     @Override
@@ -46,7 +63,7 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            Log.d(TAG, "No bluetooth in device!!!");
+            Log.d(TAG, "No bluetooth in phone!!!");
             return view;
         }
 
@@ -56,13 +73,18 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
         }else{
             initBTDevicesView();
         }
-
         return view;
     }
 
     @Override
     public void onItemClick(@NonNull BluetoothDevice btDevice) {
         Log.d(TAG, "Item clicked name = " + btDevice.getName());
+        Intent serviceIntent = new Intent(getActivity(), BTService.class);
+        serviceIntent.putExtra(BTService.BT_DEV_ADDRESS, btDevice.getAddress());
+        serviceIntent.putExtra(BTService.BT_OP_TYPE, BTService.OP_JOYSTICK_CON);
+        getActivity().startService(serviceIntent);
+
+        progressDialog = ProgressDialog.show(getActivity(), "", "Please wait while connecting");
     }
 
     @Override
@@ -75,11 +97,37 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(receiver, new IntentFilter(BTService.NOTIFICATION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
+    }
+
+
     private void initBTDevicesView(){
         btViewAdapter = new BTDeviceAdapter(mBluetoothAdapter.getBondedDevices());
         btViewAdapter.setOnItemClickListener(this);
-
         btDevsView.setAdapter(btViewAdapter);
     }
 
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                int resultCode = bundle.getInt(BTService.RESULT);
+                progressDialog.dismiss();
+            }
+        }
+    };
+
 }
+

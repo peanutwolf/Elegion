@@ -5,8 +5,12 @@ package com.vigursky.grushahit.models;
  */
 public interface Obstacle {
 
-    public int getX();
+    int getX1();
 
-    public int getY();
+    int getY1();
+
+    int getX2();
+
+    int getY2();
 
 }

@@ -1,43 +1,66 @@
 package com.vigursky.grushahit.views;
 
 
+
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.vigursky.grushahit.MainGameSurface;
 import com.vigursky.grushahit.R;
+import com.vigursky.grushahit.services.BTService;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainGameFragment extends Fragment {
+public class MainGameFragment extends Fragment implements PositionUpdater {
 
     private static final String TAG = MainGameFragment.class.getSimpleName();
-    private Toolbar toolbar;
+    private BTService.BTServiceBinder mService;
+    private boolean mBound = false;
+    private TextView scoreView;
+    private static Handler scoreHandler;
 
     public MainGameFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+        View view = inflater.inflate(R.layout.fr_game_surface, container, false);
 
-        ((ActionBarActivity)getActivity()).getSupportActionBar().hide();
+        scoreHandler = new ScoreHandler(Looper.getMainLooper());
 
-        return new MainGameSurface(getActivity().getApplicationContext());
+        MainGameSurface gameSurface = (MainGameSurface)view.findViewById(R.id.surf_main_game);
+        gameSurface.setJoystickController(this);
+        gameSurface.setHandler(scoreHandler);
+
+        scoreView = (TextView) view.findViewById(R.id.txt_score);
+
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.hide();
+
+        Intent serviceIntent = new Intent(getActivity(), BTService.class);
+        serviceIntent.putExtra(BTService.BT_OP_TYPE, BTService.OP_JOYSTICK_READ);
+        getActivity().startService(serviceIntent);
+
+        return view;
     }
 
     @Override
@@ -48,31 +71,72 @@ public class MainGameFragment extends Fragment {
         super.onDestroyView();
     }
 
-
-    private void lockOrientation(){
-        int orientation;
-        int rotation = ((WindowManager) getActivity().getSystemService(
-                Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                break;
-            case Surface.ROTATION_90:
-                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                break;
-            case Surface.ROTATION_180:
-                orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                break;
-            default:
-                orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                break;
-        }
-
-        getActivity().setRequestedOrientation(orientation);
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent intent = new Intent(getActivity(), BTService.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void unlockOrientation(){
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mBound) {
+            getActivity().unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            BTService.BTServiceBinder binder = (BTService.BTServiceBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    @Override
+    public int getX() {
+        if(mBound){
+            return mService.getX();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        if(mBound){
+            return mService.getY();
+        }
+        return 0;
+    }
+
+    private  class ScoreHandler extends Handler{
+        public ScoreHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            Bundle scoreData = msg.getData();
+            int score = 0;
+
+            if(scoreData != null){
+                score = scoreData.getInt(MainGameSurface.GAME_SCORE);
+            }
+            MainGameFragment.this.scoreView.setText("Score: " + score);
+
+
+        }
     }
 
 }

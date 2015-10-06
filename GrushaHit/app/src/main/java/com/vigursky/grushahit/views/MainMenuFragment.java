@@ -14,6 +14,10 @@ import android.widget.Button;
 import com.vigursky.grushahit.MainGameSurface;
 import com.vigursky.grushahit.R;
 
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -25,7 +29,7 @@ public class MainMenuFragment extends Fragment {
     private static final String TAG = MainMenuFragment.class.getSimpleName();
 
     public MainMenuFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -41,9 +45,10 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "gameButton pressed");
+                MainGameFragment gameFragment = new MainGameFragment();
                 FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 
-                ft.replace(R.id.main_view_fragment, new MainGameFragment());
+                ft.replace(R.id.main_view_fragment, gameFragment);
                 ft.addToBackStack(null);
                 ft.commit();
             }

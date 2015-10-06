@@ -1,10 +1,9 @@
 package com.vigursky.grushahit;
 
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.vigursky.grushahit.models.Obstacle;
 import com.vigursky.grushahit.models.RectObstacle;
@@ -12,7 +11,6 @@ import com.vigursky.grushahit.models.RectObstacle;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by vigursky on 18.09.2015.
@@ -40,9 +38,6 @@ public class ObstacleFactory {
         this.obstacleMaxHeight = obstaclesAreaHeight/70;
     }
 
-    public Obstacle getRectObstacle(int width, int height){
-        return new RectObstacle(width, height);
-    }
 
     private void genNewObstacle(){
         RectObstacle rectObstacle;
@@ -65,14 +60,14 @@ public class ObstacleFactory {
         Iterator<Obstacle> it = obstacles.iterator();
         while(it.hasNext()){
             Obstacle ob = it.next();
-            if(ob.getY() > obstaclesAreaHeight)
+            if(ob.getY1() > obstaclesAreaHeight)
                 it.remove();
         }
     }
 
     private boolean hasObstacleOnTop(){
         for(Obstacle ob : obstacles){
-            if(ob.getY() <= obstacleAreaOffset)
+            if(ob.getY1() <= obstacleAreaOffset)
                 return true;
         }
         return false;
@@ -89,7 +84,6 @@ public class ObstacleFactory {
             ((RectObstacle)ob).stepForward();
         }
         cleanupObstacles();
-
     }
 
     public void drawObstacles(Canvas canvas){
@@ -97,7 +91,17 @@ public class ObstacleFactory {
         paint.setColor(Color.GREEN);
         paint.setStyle(Paint.Style.STROKE);
         for(Obstacle ob : obstacles){
-            canvas.drawRect(ob.getX(), ob.getY(), ((RectObstacle)ob).getWidth() + ob.getX(), ((RectObstacle)ob).getHeight() + ob.getY(), paint);
+//            canvas.drawRect(ob.getX1(), ob.getY1(), ((RectObstacle)ob).getWidth() + ob.getX1(), ((RectObstacle)ob).getHeight() + ob.getY1(), paint);
+            canvas.drawRect(ob.getX1(), ob.getY1(), ob.getX2(), ob.getY2(), paint);
+
         }
+    }
+
+    public boolean isCrossover(Rect rect){
+        for (Obstacle ob : obstacles){
+            if (((RectObstacle)ob).isCrossover(rect))
+                return true;
+        }
+        return false;
     }
 }

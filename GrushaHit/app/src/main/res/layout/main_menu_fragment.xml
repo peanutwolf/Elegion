@@ -11,10 +11,13 @@
         android:id="@+id/gameButton"/>
 
     <Button
+        style="@style/btnStyleOrange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Connect BT"
+        android:drawableLeft="@drawable/ic_action"
+        android:drawablePadding="10dp"
         android:id="@+id/btDevicesButton"
         android:layout_below="@+id/gameButton"/>
 

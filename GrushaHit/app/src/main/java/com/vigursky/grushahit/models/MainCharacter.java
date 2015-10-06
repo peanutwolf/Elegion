@@ -2,8 +2,18 @@ package com.vigursky.grushahit.models;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.util.Log;
 
+import com.vigursky.grushahit.utils.BTDevicePipe;
 import com.vigursky.grushahit.utils.Speed;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by vigursky on 23.09.2015.
@@ -16,12 +26,17 @@ public class MainCharacter {
     private int width;
     private int height;
     private Bitmap bitmap;
+    private BufferedReader bufferedReader;
+    private PipedInputStream mDataInputStream;
+
 
     public MainCharacter(Bitmap bitmap){
         this.bitmap = bitmap;
         speed = new Speed(0, 0);
-        x = 100;
-        y = 100;
+        x = 1190;
+        y = 1040;
+        this.mDataInputStream = BTDevicePipe.getInstance().getDataInputStream();
+        bufferedReader = new BufferedReader(new InputStreamReader(mDataInputStream));
     }
 
     public void update(){
@@ -29,8 +44,26 @@ public class MainCharacter {
         this.y += speed.getYv();
     }
 
+    public void update(int xv, int yv){
+        speed.setXv(xv);
+        speed.setYv(yv);
+
+        this.x += speed.getXv();
+        this.y += speed.getYv();
+    }
+
     public void draw(Canvas canvas){
-        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+        int maxWidth = canvas.getWidth();
+        int maxHeight = canvas.getHeight();
+
+        y = y <= bitmap.getWidth()? bitmap.getWidth() : y;
+        y = y > maxHeight ? maxHeight : y;
+
+        x = x <= bitmap.getHeight()? bitmap.getHeight() : x;
+        x = x > maxWidth ? maxWidth : x;
+
+//        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+        canvas.drawBitmap(bitmap, x, y, null);
     }
 
     public int getX() {
@@ -41,4 +74,7 @@ public class MainCharacter {
         return y;
     }
 
+    public Rect getRectArea() {
+        return new Rect(x, y, x + bitmap.getWidth(), y + bitmap.getHeight());
+    }
 }

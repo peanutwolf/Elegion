@@ -5,6 +5,14 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.vigursky.grushahit.utils.BTDevicePipe;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+
 /**
  * Created by vigursky on 18.09.2015.
  */
@@ -14,8 +22,10 @@ public class MainGameThread extends Thread {
     private final static int	MAX_FRAME_SKIPS = 5;
     private final static int	FRAME_PERIOD = 1000 / MAX_FPS;
 
-    private SurfaceView surfaceView = null;
-    private SurfaceHolder surfaceHolder = null;
+    private SurfaceView surfaceView;
+    private SurfaceHolder surfaceHolder;
+    public boolean running = true;
+
     private static final String TAG = MainGameThread.class.getSimpleName();
 
     public MainGameThread(SurfaceView surfaceView){
@@ -31,19 +41,21 @@ public class MainGameThread extends Thread {
         long timeDiff;
         int sleepTime;
         int framesSkipped;
+        running = true;
 
         Log.d(TAG, "Starting game loop");
 
-        while (true) {
+        while (running) {
             canvas = null;
             try {
                 canvas = this.surfaceHolder.lockCanvas();
-                if(canvas == null)
+                if(canvas == null || surfaceView == null)
                     continue;
                 synchronized (surfaceHolder) {
                     beginTime = System.currentTimeMillis();
                     framesSkipped = 0;
-                    ((MainGameSurface)surfaceView).update();
+
+                    ((MainGameSurface) surfaceView).update();
                     ((MainGameSurface)surfaceView).render(canvas);
                     timeDiff = System.currentTimeMillis() - beginTime;
                     sleepTime = (int)(FRAME_PERIOD - timeDiff);
@@ -66,6 +78,8 @@ public class MainGameThread extends Thread {
                 }
             }
         }
+
+        Log.d(TAG, "Exiting game loop");
     }
 
 }
