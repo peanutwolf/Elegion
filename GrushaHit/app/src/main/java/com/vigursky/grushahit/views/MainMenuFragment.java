@@ -1,18 +1,23 @@
 package com.vigursky.grushahit.views;
 
 
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.vigursky.grushahit.MainGameSurface;
 import com.vigursky.grushahit.R;
+import com.vigursky.grushahit.views.dialogs.SpeedSelectionDialog;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
@@ -47,6 +52,11 @@ public class MainMenuFragment extends Fragment {
                 Log.d(TAG, "gameButton pressed");
                 MainGameFragment gameFragment = new MainGameFragment();
                 FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+
+                ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+
+                DialogFragment dialog = new SpeedSelectionDialog();
+                dialog.show(getFragmentManager(), "NoticeDialogFragment");
 
                 ft.replace(R.id.main_view_fragment, gameFragment);
                 ft.addToBackStack(null);

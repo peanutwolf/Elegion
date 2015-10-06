@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">GrushaHit</string>
     <string name="app_icon">app logo</string>
+    <string name="str_init_speed_txt">Select speed</string>
 
 </resources>

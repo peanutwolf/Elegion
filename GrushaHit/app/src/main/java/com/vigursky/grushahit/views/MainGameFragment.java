@@ -53,9 +53,6 @@ public class MainGameFragment extends Fragment implements PositionUpdater {
 
         scoreView = (TextView) view.findViewById(R.id.txt_score);
 
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.hide();
-
         Intent serviceIntent = new Intent(getActivity(), BTService.class);
         serviceIntent.putExtra(BTService.BT_OP_TYPE, BTService.OP_JOYSTICK_READ);
         getActivity().startService(serviceIntent);

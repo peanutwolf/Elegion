@@ -56,7 +56,7 @@ public class MainCharacter {
 
         y = y < 0 ? 0 : y;
         y = y > maxHeight ? maxHeight : y;
-        
+
         canvas.drawBitmap(bitmap, x, y, null);
     }
 
