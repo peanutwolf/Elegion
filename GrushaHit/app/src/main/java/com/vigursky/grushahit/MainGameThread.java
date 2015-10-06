@@ -5,14 +5,6 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.vigursky.grushahit.utils.BTDevicePipe;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-
 /**
  * Created by vigursky on 18.09.2015.
  */

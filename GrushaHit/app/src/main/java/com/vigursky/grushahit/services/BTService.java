@@ -98,6 +98,8 @@ public class BTService extends IntentService {
         if(mSocket == null)
             return;
 
+        started = true;
+
         InputStream mInputStream = mSocket.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(mInputStream));
         String xyLine = "0/0";

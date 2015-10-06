@@ -24,18 +24,7 @@ import android.view.ViewGroup;
 
 import com.vigursky.grushahit.R;
 import com.vigursky.grushahit.services.BTService;
-import com.vigursky.grushahit.utils.BTDevicePipe;
 import com.vigursky.grushahit.views.adapters.BTDeviceAdapter;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PipedOutputStream;
-import java.util.UUID;
 
 
 

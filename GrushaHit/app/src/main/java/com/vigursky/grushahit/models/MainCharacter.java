@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
-import com.vigursky.grushahit.utils.BTDevicePipe;
 import com.vigursky.grushahit.utils.Speed;
 
 import java.io.BufferedReader;
@@ -26,17 +25,13 @@ public class MainCharacter {
     private int width;
     private int height;
     private Bitmap bitmap;
-    private BufferedReader bufferedReader;
-    private PipedInputStream mDataInputStream;
 
 
     public MainCharacter(Bitmap bitmap){
         this.bitmap = bitmap;
         speed = new Speed(0, 0);
-        x = 1190;
-        y = 1040;
-        this.mDataInputStream = BTDevicePipe.getInstance().getDataInputStream();
-        bufferedReader = new BufferedReader(new InputStreamReader(mDataInputStream));
+        x = 10;
+        y = 10;
     }
 
     public void update(){
@@ -53,16 +48,15 @@ public class MainCharacter {
     }
 
     public void draw(Canvas canvas){
-        int maxWidth = canvas.getWidth();
-        int maxHeight = canvas.getHeight();
+        int maxWidth = canvas.getWidth() - bitmap.getWidth();
+        int maxHeight = canvas.getHeight() - bitmap.getHeight();
 
-        y = y <= bitmap.getWidth()? bitmap.getWidth() : y;
-        y = y > maxHeight ? maxHeight : y;
-
-        x = x <= bitmap.getHeight()? bitmap.getHeight() : x;
+        x = x < 0 ? 0 : x;
         x = x > maxWidth ? maxWidth : x;
 
-//        canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2), y - (bitmap.getHeight() / 2), null);
+        y = y < 0 ? 0 : y;
+        y = y > maxHeight ? maxHeight : y;
+        
         canvas.drawBitmap(bitmap, x, y, null);
     }
 

@@ -53,6 +53,7 @@ public class MainGameSurface extends SurfaceView implements
         mainCharacter.update(joystick.getX(), joystick.getY());
         this.updateScore();
         if (obstacleFactory.isCrossover(mainCharacter.getRectArea())){
+            mainGameThread.running = false;
             // TODO: show score result, restart game
         }
     }
