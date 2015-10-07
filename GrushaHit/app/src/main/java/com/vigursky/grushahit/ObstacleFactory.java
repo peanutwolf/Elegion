@@ -26,16 +26,24 @@ public class ObstacleFactory {
     private int obstacleMinHeight;
     private int obstacleMaxWidth;
     private int obstacleMaxHeight;
+    private int obstacleInitialSpeed;
 
     ObstacleFactory(int obstaclesAreaWidth, int obstaclesAreaHeight){
         this.obstaclesAreaWidth = obstaclesAreaWidth;
         this.obstaclesAreaHeight = obstaclesAreaHeight;
 
-        this.obstacleAreaOffset =obstaclesAreaHeight/30; // leave 10 percents of area between obstacles
+        this.obstacleAreaOffset =obstaclesAreaHeight/30; // leave 30 percents of area between obstacles
         this.obstacleMinWidth = obstaclesAreaWidth/10;
         this.obstacleMinHeight = obstaclesAreaHeight/10;
         this.obstacleMaxWidth = obstaclesAreaWidth/40;
         this.obstacleMaxHeight = obstaclesAreaHeight/70;
+
+        this.obstacleInitialSpeed = 5;
+    }
+
+    ObstacleFactory(int obstaclesAreaWidth, int obstaclesAreaHeight, int initialSpeed){
+        this(obstaclesAreaWidth, obstaclesAreaHeight);
+        this.obstacleInitialSpeed = initialSpeed;
     }
 
 
@@ -48,7 +56,7 @@ public class ObstacleFactory {
         int random_height = (int) (obstacleMinHeight + (Math.random() * ((obstacleMaxHeight - obstacleMinHeight) + 1)));
         int random_xpos = (int) ((Math.random() * (obstaclesAreaWidth-random_width)));
 
-        rectObstacle = new RectObstacle(random_width, random_height);
+        rectObstacle = new RectObstacle(random_width, random_height, obstacleInitialSpeed);
         rectObstacle.setPosition(random_xpos, -1 * random_height);
 
         obstacles.add(rectObstacle);

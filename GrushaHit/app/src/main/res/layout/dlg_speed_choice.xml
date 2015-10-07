@@ -14,8 +14,18 @@
         android:layout_gravity="center_horizontal" />
 
     <SeekBar
+        android:id="@+id/seek_init_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seek_init_speed"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/str_speed_val"
+        android:textSize="16dp"
+        android:id="@+id/txt_speed_val"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

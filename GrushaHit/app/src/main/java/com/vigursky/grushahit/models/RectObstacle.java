@@ -25,6 +25,10 @@ public class RectObstacle implements Obstacle {
         this.speed = new Speed();
     }
 
+    public RectObstacle(int width, int height, int initialSpeed){
+        this(width,height);
+        this.speed.setYv(initialSpeed);
+    }
 
     public void setPosition(int x, int y){
         this.x1 = x;

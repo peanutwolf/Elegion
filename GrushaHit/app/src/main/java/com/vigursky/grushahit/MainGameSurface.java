@@ -35,6 +35,7 @@ public class MainGameSurface extends SurfaceView implements
     private Message scoreMsg;
     private Bundle scoreData = new Bundle();
     private int score = 0;
+    private int currentObstacleSpeed = 5;
 
     public MainGameSurface(Context context){
         super(context);
@@ -78,6 +79,10 @@ public class MainGameSurface extends SurfaceView implements
         scoreHandler.sendMessage(scoreMsg);
     }
 
+    public void setInitialSpeed(int initialSpeed) {
+        this.currentObstacleSpeed = initialSpeed;
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "surfaceCreated");
@@ -87,7 +92,7 @@ public class MainGameSurface extends SurfaceView implements
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.d(TAG, "surfaceChanged width = " + width + " height = " + height);
-        obstacleFactory = new ObstacleFactory(width, height);
+        obstacleFactory = new ObstacleFactory(width, height, currentObstacleSpeed);
         mainCharacter = new MainCharacter(BitmapFactory.decodeResource(getResources(), R.drawable.droid_1));
     }
 

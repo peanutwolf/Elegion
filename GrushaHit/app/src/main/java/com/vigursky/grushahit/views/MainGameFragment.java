@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,27 +28,37 @@ import com.vigursky.grushahit.services.BTService;
  */
 public class MainGameFragment extends Fragment implements PositionUpdater {
 
+    public static final String INITIAL_SPEED = "MainGameFragment_initial_spped";
+
     private static final String TAG = MainGameFragment.class.getSimpleName();
     private BTService.BTServiceBinder mService;
     private boolean mBound = false;
     private TextView scoreView;
     private static Handler scoreHandler;
+    private int initialSpeed = 5;
 
     public MainGameFragment() {
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fr_game_surface, container, false);
+        Bundle args = getArguments();
+
+        if(args != null && args.containsKey(INITIAL_SPEED)){
+            initialSpeed = args.getInt(INITIAL_SPEED);
+        }
 
         scoreHandler = new ScoreHandler(Looper.getMainLooper());
 
         MainGameSurface gameSurface = (MainGameSurface)view.findViewById(R.id.surf_main_game);
         gameSurface.setJoystickController(this);
         gameSurface.setHandler(scoreHandler);
+        gameSurface.setInitialSpeed(initialSpeed);
 
         scoreView = (TextView) view.findViewById(R.id.txt_score);
 

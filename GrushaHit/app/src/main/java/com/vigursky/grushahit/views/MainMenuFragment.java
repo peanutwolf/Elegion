@@ -26,7 +26,7 @@ import java.io.PipedOutputStream;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainMenuFragment extends Fragment {
+public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.SpeedSelectionDialogListener{
 
     private Button gameButton;
     private Button btDeviceButton;
@@ -49,18 +49,11 @@ public class MainMenuFragment extends Fragment {
         gameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "gameButton pressed");
-                MainGameFragment gameFragment = new MainGameFragment();
-                FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-
                 ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
 
                 DialogFragment dialog = new SpeedSelectionDialog();
-                dialog.show(getFragmentManager(), "NoticeDialogFragment");
-
-                ft.replace(R.id.main_view_fragment, gameFragment);
-                ft.addToBackStack(null);
-                ft.commit();
+                dialog.setTargetFragment(MainMenuFragment.this, 0);
+                dialog.show(getFragmentManager(), "SpeedSelectionDialog");
             }
         });
 
@@ -79,4 +72,18 @@ public class MainMenuFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int initialSpeed) {
+        Log.d(TAG, "gameButton pressed");
+        Bundle args = new Bundle();
+
+        MainGameFragment gameFragment = new MainGameFragment();
+        args.putInt(MainGameFragment.INITIAL_SPEED, initialSpeed);
+        gameFragment.setArguments(args);
+
+        FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+        ft.replace(R.id.main_view_fragment, gameFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
 }

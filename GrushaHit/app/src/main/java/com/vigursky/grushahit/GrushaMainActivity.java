@@ -1,11 +1,10 @@
 package com.vigursky.grushahit;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+
 import android.view.Window;
 import android.view.WindowManager;
 
