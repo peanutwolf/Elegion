@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.vigursky.grushahit.views.MainGameSurface;
+
 /**
  * Created by vigursky on 18.09.2015.
  */

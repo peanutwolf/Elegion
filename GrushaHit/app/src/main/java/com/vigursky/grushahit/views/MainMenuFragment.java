@@ -3,7 +3,6 @@ package com.vigursky.grushahit.views;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -11,17 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
-import com.vigursky.grushahit.MainGameSurface;
 import com.vigursky.grushahit.R;
 import com.vigursky.grushahit.views.dialogs.SpeedSelectionDialog;
-
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +28,6 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
     public MainMenuFragment() {
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

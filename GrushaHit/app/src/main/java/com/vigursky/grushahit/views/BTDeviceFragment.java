@@ -2,6 +2,7 @@ package com.vigursky.grushahit.views;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -25,7 +26,6 @@ import android.view.ViewGroup;
 import com.vigursky.grushahit.R;
 import com.vigursky.grushahit.services.BTService;
 import com.vigursky.grushahit.views.adapters.BTDeviceAdapter;
-
 
 
 public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItemClickListener {
@@ -110,10 +110,25 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            int resultCode;
+            String msg;
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+
             Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                int resultCode = bundle.getInt(BTService.RESULT);
+            if(progressDialog != null){
                 progressDialog.dismiss();
+            }
+            if (bundle != null) {
+                resultCode = bundle.getInt(BTService.RESULT);
+                msg = bundle.getString(BTService.RESULT_MSG);
+                if(msg != null){
+                    dialog.setTitle(msg);
+                }
+                if(resultCode == Activity.RESULT_OK){
+                    dialog.create().show();
+                }else if(resultCode == Activity.RESULT_CANCELED){
+                    dialog.setTitle("Error!").create().show();
+                }
             }
         }
     };

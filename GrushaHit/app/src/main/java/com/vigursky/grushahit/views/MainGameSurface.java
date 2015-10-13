@@ -1,4 +1,4 @@
-package com.vigursky.grushahit;
+package com.vigursky.grushahit.views;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -13,8 +13,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.vigursky.grushahit.MainGameThread;
+import com.vigursky.grushahit.R;
 import com.vigursky.grushahit.models.MainCharacter;
-import com.vigursky.grushahit.views.PositionUpdater;
+import com.vigursky.grushahit.utils.ObstacleFactory;
 
 /**
  * Created by vigursky on 18.09.2015.
@@ -24,6 +26,9 @@ public class MainGameSurface extends SurfaceView implements
         SurfaceHolder.Callback  {
 
     public static final String GAME_SCORE = "GAME_SCORE";
+    public static final String MSG_TYPE = "MSG_TYPE";
+    public static final String SCORE_UPDATE = "SCORE_UPDATE";
+    public static final String GAME_END = "GAME_END";
 
     private static final String TAG = MainGameSurface.class.getSimpleName();
 
@@ -55,7 +60,11 @@ public class MainGameSurface extends SurfaceView implements
         this.updateScore();
         if (obstacleFactory.isCrossover(mainCharacter.getRectArea())){
             mainGameThread.running = false;
-            // TODO: show score result, restart game
+            scoreMsg = Message.obtain();
+            scoreData.putInt(GAME_SCORE, score);
+            scoreData.putString(MSG_TYPE, GAME_END);
+            scoreMsg.setData(scoreData);
+            scoreHandler.sendMessage(scoreMsg);
         }
     }
 
@@ -75,6 +84,7 @@ public class MainGameSurface extends SurfaceView implements
         score++;
         scoreMsg = Message.obtain();
         scoreData.putInt(GAME_SCORE, score);
+        scoreData.putString(MSG_TYPE, SCORE_UPDATE);
         scoreMsg.setData(scoreData);
         scoreHandler.sendMessage(scoreMsg);
     }

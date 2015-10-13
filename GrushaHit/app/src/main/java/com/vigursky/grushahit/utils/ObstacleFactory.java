@@ -1,4 +1,4 @@
-package com.vigursky.grushahit;
+package com.vigursky.grushahit.utils;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,7 +28,7 @@ public class ObstacleFactory {
     private int obstacleMaxHeight;
     private int obstacleInitialSpeed;
 
-    ObstacleFactory(int obstaclesAreaWidth, int obstaclesAreaHeight){
+    public ObstacleFactory(int obstaclesAreaWidth, int obstaclesAreaHeight){
         this.obstaclesAreaWidth = obstaclesAreaWidth;
         this.obstaclesAreaHeight = obstaclesAreaHeight;
 
@@ -41,7 +41,7 @@ public class ObstacleFactory {
         this.obstacleInitialSpeed = 5;
     }
 
-    ObstacleFactory(int obstaclesAreaWidth, int obstaclesAreaHeight, int initialSpeed){
+    public ObstacleFactory(int obstaclesAreaWidth, int obstaclesAreaHeight, int initialSpeed){
         this(obstaclesAreaWidth, obstaclesAreaHeight);
         this.obstacleInitialSpeed = initialSpeed;
     }

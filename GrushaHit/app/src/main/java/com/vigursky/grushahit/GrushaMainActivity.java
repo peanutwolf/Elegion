@@ -3,20 +3,13 @@ package com.vigursky.grushahit;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.vigursky.grushahit.views.MainMenuFragment;
-
-import java.util.Set;
 
 public class GrushaMainActivity extends ActionBarActivity {
 
     private static final String TAG = GrushaMainActivity.class.getSimpleName();
-
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +34,5 @@ public class GrushaMainActivity extends ActionBarActivity {
             super.onBackPressed();
         }
     }
-
 
 }

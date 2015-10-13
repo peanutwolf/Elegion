@@ -2,6 +2,7 @@ package com.vigursky.grushahit.views;
 
 
 
+import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -19,14 +20,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.vigursky.grushahit.MainGameSurface;
+import com.vigursky.grushahit.GrushaMainActivity;
 import com.vigursky.grushahit.R;
 import com.vigursky.grushahit.services.BTService;
+import com.vigursky.grushahit.views.dialogs.ScoreConfirmDialog;
+import com.vigursky.grushahit.views.dialogs.SpeedSelectionDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainGameFragment extends Fragment implements PositionUpdater {
+public class MainGameFragment extends Fragment implements PositionUpdater, ScoreConfirmDialog.ScoreConfirmDialogListener{
 
     public static final String INITIAL_SPEED = "MainGameFragment_initial_spped";
 
@@ -125,6 +128,13 @@ public class MainGameFragment extends Fragment implements PositionUpdater {
         return 0;
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, String name) {
+        Intent intent = new Intent(getActivity(), GrushaMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     private  class ScoreHandler extends Handler{
         public ScoreHandler(Looper looper) {
             super(looper);
@@ -132,14 +142,28 @@ public class MainGameFragment extends Fragment implements PositionUpdater {
 
         @Override
         public void handleMessage(Message msg) {
-
-            Bundle scoreData = msg.getData();
             int score = 0;
+            String type = "";
+            Bundle scoreData = msg.getData();
 
             if(scoreData != null){
+                type = scoreData.getString(MainGameSurface.MSG_TYPE);
                 score = scoreData.getInt(MainGameSurface.GAME_SCORE);
             }
-            MainGameFragment.this.scoreView.setText("Score: " + score);
+            switch (type){
+                case MainGameSurface.SCORE_UPDATE:
+                    MainGameFragment.this.scoreView.setText("Score: " + score);
+                    break;
+                case MainGameSurface.GAME_END:
+                    DialogFragment dialog = new ScoreConfirmDialog();
+                    dialog.setArguments(scoreData);
+                    dialog.setTargetFragment(MainGameFragment.this, 0);
+                    dialog.show(getFragmentManager(), "ScoreConfirmDialog");
+                    break;
+                default:
+                    break;
+            }
+
 
 
         }

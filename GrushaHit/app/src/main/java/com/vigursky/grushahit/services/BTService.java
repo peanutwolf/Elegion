@@ -20,19 +20,21 @@ import java.util.UUID;
 
 public class BTService extends IntentService {
 
-    private static BluetoothAdapter mBluetoothAdapter = null;
+    private  BluetoothAdapter mBluetoothAdapter = null;
     private BluetoothDevice mBTDevice;
-    private static BluetoothSocket mSocket;
-    private static boolean started = true;
+    private  BluetoothSocket mSocket;
+    private  boolean started = true;
 
     private final IBinder mBinder = new BTServiceBinder();
 
-    private static int X = 0;
-    private static int Y = 0;
+    private  int X = 0;
+    private  int Y = 0;
 
     public static final String RESULT = "result";
+    public static final String RESULT_MSG = "result_msg";
     public static final String OP_JOYSTICK_READ = "BTService_op_joy_read";
     public static final String OP_JOYSTICK_CON = "BTService_op_joy_connect";
+    public static final String OP_JOYSTICK_GET = "BTService_op_joy_get_connected";
     public static final String BT_DEV_ADDRESS = "BTService_dev_addr";
     public static final String BT_OP_TYPE = "BTService_op_type";
     public static final String NOTIFICATION = "com.vigursky.services";
@@ -70,7 +72,7 @@ public class BTService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String mBTDevAddr = intent.getStringExtra(BT_DEV_ADDRESS);;
+        String mBTDevAddr = intent.getStringExtra(BT_DEV_ADDRESS);
         String type = intent.getStringExtra(BT_OP_TYPE);
 
         if(type == null)
@@ -87,6 +89,9 @@ public class BTService extends IntentService {
             case OP_JOYSTICK_CON:
                 joystickConnect(mBTDevAddr);
                 break;
+            case OP_JOYSTICK_GET:
+                joystickGetConnectedDevice();
+                break;
             default:
                 break;
         }
@@ -97,7 +102,6 @@ public class BTService extends IntentService {
 
         if(mSocket == null)
             return;
-
         started = true;
 
         InputStream mInputStream = mSocket.getInputStream();
@@ -108,7 +112,7 @@ public class BTService extends IntentService {
             if(reader.ready())
                 xyLine = reader.readLine();
             if(!xyLine.equals("")){
-                BTService.updateXYCoordinates(xyLine);
+                updateXYCoordinates(xyLine);
             }
         }
     }
@@ -117,15 +121,18 @@ public class BTService extends IntentService {
 
         if(mBluetoothAdapter == null){
             this.publishResults(Activity.RESULT_CANCELED);
+            return;
         }if(mSocket != null){
             if(mSocket.isConnected()){
-                this.publishResults(Activity.RESULT_CANCELED);
+                this.publishResults(Activity.RESULT_OK, "Already connected");
+                return;
             }
         }
 
         mBTDevice = mBluetoothAdapter.getRemoteDevice(mBTAddess);
         if(mBTDevice == null){
             this.publishResults(Activity.RESULT_CANCELED);
+            return;
         }
 
         try {
@@ -135,9 +142,19 @@ public class BTService extends IntentService {
             try {
                 mSocket.close();
             } catch (IOException e1) {}
+            this.publishResults(Activity.RESULT_CANCELED);
+            return;
         }
 
-        this.publishResults(Activity.RESULT_OK);
+        this.publishResults(Activity.RESULT_OK, "Connected!");
+    }
+
+    private void joystickGetConnectedDevice(){
+        if(mSocket != null && mSocket.isConnected()){
+            this.publishResults(Activity.RESULT_OK, mSocket.getRemoteDevice().getAddress());
+        }else{
+            this.publishResults(Activity.RESULT_CANCELED);
+        }
     }
 
     private void publishResults(int result) {
@@ -146,8 +163,15 @@ public class BTService extends IntentService {
         sendBroadcast(intent);
     }
 
+    private void publishResults(int result, String msg) {
+        Intent intent = new Intent(NOTIFICATION);
+        intent.putExtra(RESULT, result);
+        intent.putExtra(RESULT_MSG, msg);
+        sendBroadcast(intent);
+    }
 
-    private static void updateXYCoordinates(String xyLine){
+
+    private  void updateXYCoordinates(String xyLine){
         String xy[] = xyLine.split("/");
         try{
             setX(Integer.parseInt(xy[0]));
@@ -156,11 +180,11 @@ public class BTService extends IntentService {
 
     }
 
-    private static void setX(Integer x){
+    private  void setX(Integer x){
         X = x;
     }
 
-    private static void setY(Integer y){
+    private  void setY(Integer y){
         Y = y;
     }
 

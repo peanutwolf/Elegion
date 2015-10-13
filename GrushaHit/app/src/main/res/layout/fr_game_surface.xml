@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.vigursky.grushahit.MainGameSurface
+    <com.vigursky.grushahit.views.MainGameSurface
         android:id="@+id/surf_main_game"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"/>
