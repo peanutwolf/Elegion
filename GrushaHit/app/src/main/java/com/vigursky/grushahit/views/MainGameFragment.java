@@ -7,12 +7,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,15 +25,18 @@ import android.widget.TextView;
 import com.vigursky.grushahit.GrushaMainActivity;
 import com.vigursky.grushahit.R;
 import com.vigursky.grushahit.services.BTService;
+import com.vigursky.grushahit.utils.ScoreSaver;
 import com.vigursky.grushahit.views.dialogs.ScoreConfirmDialog;
 import com.vigursky.grushahit.views.dialogs.SpeedSelectionDialog;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainGameFragment extends Fragment implements PositionUpdater, ScoreConfirmDialog.ScoreConfirmDialogListener{
 
-    public static final String INITIAL_SPEED = "MainGameFragment_initial_spped";
+    public static final String INITIAL_SPEED = "MainGameFragment_initial_speed";
 
     private static final String TAG = MainGameFragment.class.getSimpleName();
     private BTService.BTServiceBinder mService;
@@ -130,6 +135,7 @@ public class MainGameFragment extends Fragment implements PositionUpdater, Score
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String name) {
+        ScoreSaver.saveScore(getActivity(), name, 1);
         Intent intent = new Intent(getActivity(), GrushaMainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -163,9 +169,6 @@ public class MainGameFragment extends Fragment implements PositionUpdater, Score
                 default:
                     break;
             }
-
-
-
         }
     }
 

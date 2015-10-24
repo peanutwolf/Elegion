@@ -4,11 +4,6 @@ package com.vigursky.grushahit.utils;
  * Created by vigursky on 21.09.2015.
  */
 
-enum Direction{
-        NO_MOVE,
-        FORWARD,
-        BACKWARD
-}
 
 public class Speed {
 
@@ -53,6 +48,12 @@ public class Speed {
     }
     public void setyDirection(Direction yDirection) {
         this.DIRECTION_Y = yDirection;
+    }
+
+    enum Direction{
+        NO_MOVE,
+        FORWARD,
+        BACKWARD
     }
 
 }

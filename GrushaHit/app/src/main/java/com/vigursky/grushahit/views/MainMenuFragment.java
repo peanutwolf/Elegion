@@ -22,6 +22,7 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
 
     private Button gameButton;
     private Button btDeviceButton;
+    private Button scoresButton;
 
     private static final String TAG = MainMenuFragment.class.getSimpleName();
 
@@ -34,8 +35,9 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_menu_fragment, container, false);
 
-        gameButton = (Button)view.findViewById(R.id.gameButton);
-        btDeviceButton = (Button)view.findViewById(R.id.btDevicesButton);
+        gameButton = (Button)view.findViewById(R.id.btn_game_start);
+        btDeviceButton = (Button)view.findViewById(R.id.btn_btdevice_list);
+        scoresButton = (Button)view.findViewById(R.id.btn_score_list);
 
         gameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +61,21 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
                 ft.commit();
             }
         });
+
+
+        scoresButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "btDeviceButton pressed");
+                FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+
+                ft.replace(R.id.main_view_fragment, new ScoresFragment());
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
+
+
         return view;
     }
 

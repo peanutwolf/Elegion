@@ -4,4 +4,7 @@
     <string name="str_init_speed_txt">Select speed</string>
     <string name="str_speed_val">Medium</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

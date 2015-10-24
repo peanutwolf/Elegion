@@ -19,8 +19,8 @@ import com.vigursky.grushahit.R;
 public class ScoreConfirmDialog extends DialogFragment {
 
     private ScoreConfirmDialogListener mListener;
-    private TextView nameView;
-    private EditText scoreView;
+    private TextView scoreView;
+    private EditText nameView;
 
 
     public interface ScoreConfirmDialogListener{
@@ -46,8 +46,8 @@ public class ScoreConfirmDialog extends DialogFragment {
 
         View v = inflater.inflate(R.layout.dlg_score_confirm, null);
 
-        nameView = (TextView) v.findViewById(R.id.txt_final_score_dlg);
-        scoreView = (EditText) v.findViewById(R.id.edt_final_score_name);
+        scoreView = (TextView) v.findViewById(R.id.txt_final_score_dlg);
+        nameView = (EditText) v.findViewById(R.id.edt_final_score_name);
 
         builder.setView(v)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -55,7 +55,7 @@ public class ScoreConfirmDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if(scoreView.getText().equals(""))
                             return;
-                        mListener.onDialogPositiveClick(ScoreConfirmDialog.this, scoreView.getText().toString());
+                        mListener.onDialogPositiveClick(ScoreConfirmDialog.this, nameView.getText().toString());
                     }
                 });
 

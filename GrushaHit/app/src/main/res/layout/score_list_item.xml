@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/padding_medium"
+    android:paddingBottom="@dimen/padding_medium"
+    android:paddingLeft="@dimen/padding_medium"
+    android:background="#F0FFFF"
+    tools:ignore="contentDescription">
+
+    <TextView
+        android:id="@+id/txt_score_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="@dimen/margin_small"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        tools:text="1"/>
+
+    <TextView
+        android:id="@+id/txt_score_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="@dimen/margin_small"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        tools:text="User Name"
+        android:layout_toRightOf="@id/txt_score_id"/>
+
+    <TextView
+        android:id="@+id/txt_score_user_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_small"
+        android:textStyle="normal"
+        android:textSize="24dp"
+        android:gravity="right"
+        tools:text="User Score"
+        android:layout_toRightOf="@id/txt_score_user_name"/>
+
+
+
+</RelativeLayout>

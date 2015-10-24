@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Start Game"
-        android:id="@+id/gameButton"/>
+        android:id="@+id/btn_game_start"/>
 
     <Button
         style="@style/btnStyleOrange"
@@ -20,7 +20,16 @@
         android:text="Connect BT"
         android:drawableLeft="@drawable/ic_action"
         android:drawablePadding="10dp"
-        android:id="@+id/btDevicesButton"
-        android:layout_below="@+id/gameButton"/>
+        android:id="@+id/btn_btdevice_list"
+        android:layout_below="@id/btn_game_start"/>
+
+    <Button
+        style="@style/btnStyleOrange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Scores"
+        android:id="@+id/btn_score_list"
+        android:layout_below="@id/btn_btdevice_list"/>
 
 </RelativeLayout>
