@@ -8,6 +8,7 @@ import com.vigursky.grushahit.models.UserModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by vigursky on 24.10.2015.
@@ -23,10 +24,14 @@ public class ScoreSaver {
         SharedPreferences.Editor editor = sp.edit();
         int size = sp.getInt(mScoreSize, 0)+1;
 
+        if(name.equals(""))
+            return;
+
         editor.putString(mUserName + size, name);
         editor.putInt(mScoreValue+size, score);
         editor.putInt(mScoreSize, size);
         editor.commit();
+
     }
 
     public static String readString(Activity activity, String key, String defaultValue){
@@ -43,7 +48,7 @@ public class ScoreSaver {
 
         for (int i = 1; i <= size; i++) {
             name = sp.getString(mUserName + i, null);
-            score = sp.getInt(mScoreSize + i, 0);
+            score = sp.getInt(mScoreValue + i, 0);
             scoreList.add(new UserModel(name, score));
         }
 

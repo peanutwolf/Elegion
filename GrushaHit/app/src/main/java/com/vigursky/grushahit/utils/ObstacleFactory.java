@@ -32,7 +32,7 @@ public class ObstacleFactory {
         this.obstaclesAreaWidth = obstaclesAreaWidth;
         this.obstaclesAreaHeight = obstaclesAreaHeight;
 
-        this.obstacleAreaOffset =obstaclesAreaHeight/30; // leave 30 percents of area between obstacles
+        this.obstacleAreaOffset =obstaclesAreaHeight/40; // leave 30 percents of area between obstacles
         this.obstacleMinWidth = obstaclesAreaWidth/10;
         this.obstacleMinHeight = obstaclesAreaHeight/10;
         this.obstacleMaxWidth = obstaclesAreaWidth/40;
@@ -97,11 +97,9 @@ public class ObstacleFactory {
     public void drawObstacles(Canvas canvas){
         paint.setStrokeWidth(3);
         paint.setColor(Color.GREEN);
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         for(Obstacle ob : obstacles){
-//            canvas.drawRect(ob.getX1(), ob.getY1(), ((RectObstacle)ob).getWidth() + ob.getX1(), ((RectObstacle)ob).getHeight() + ob.getY1(), paint);
             canvas.drawRect(ob.getX1(), ob.getY1(), ob.getX2(), ob.getY2(), paint);
-
         }
     }
 

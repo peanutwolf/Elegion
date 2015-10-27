@@ -32,6 +32,8 @@ public class MainGameSurface extends SurfaceView implements
 
     private static final String TAG = MainGameSurface.class.getSimpleName();
 
+    private Context context;
+
     private MainGameThread mainGameThread = null;
     private ObstacleFactory obstacleFactory;
     private MainCharacter mainCharacter;
@@ -44,12 +46,14 @@ public class MainGameSurface extends SurfaceView implements
 
     public MainGameSurface(Context context){
         super(context);
+        this.context = context;
     }
 
     public MainGameSurface(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
         mainGameThread = new MainGameThread(this);
+        this.context = context;
     }
 
     public void update(){
@@ -61,7 +65,6 @@ public class MainGameSurface extends SurfaceView implements
         if (obstacleFactory.isCrossover(mainCharacter.getRectArea())){
             mainGameThread.running = false;
             scoreMsg = Message.obtain();
-            scoreData.putInt(GAME_SCORE, score);
             scoreData.putString(MSG_TYPE, GAME_END);
             scoreMsg.setData(scoreData);
             scoreHandler.sendMessage(scoreMsg);
@@ -103,7 +106,7 @@ public class MainGameSurface extends SurfaceView implements
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.d(TAG, "surfaceChanged width = " + width + " height = " + height);
         obstacleFactory = new ObstacleFactory(width, height, currentObstacleSpeed);
-        mainCharacter = new MainCharacter(BitmapFactory.decodeResource(getResources(), R.drawable.droid_1));
+        mainCharacter = new MainCharacter(context);
     }
 
     @Override

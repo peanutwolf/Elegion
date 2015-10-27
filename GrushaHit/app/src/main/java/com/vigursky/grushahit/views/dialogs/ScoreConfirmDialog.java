@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.vigursky.grushahit.BuildConfig;
 import com.vigursky.grushahit.R;
+import com.vigursky.grushahit.views.MainGameSurface;
 
 /**
  * Created by vigursky on 08.10.2015.
@@ -21,10 +23,11 @@ public class ScoreConfirmDialog extends DialogFragment {
     private ScoreConfirmDialogListener mListener;
     private TextView scoreView;
     private EditText nameView;
+    private int score;
 
 
     public interface ScoreConfirmDialogListener{
-        void onDialogPositiveClick(DialogFragment dialog, String name);
+        void onDialogPositiveClick(DialogFragment dialog, String name, int score);
     }
 
     @Override
@@ -46,8 +49,13 @@ public class ScoreConfirmDialog extends DialogFragment {
 
         View v = inflater.inflate(R.layout.dlg_score_confirm, null);
 
+        Bundle args = getArguments();
+         score = args.getInt(MainGameSurface.GAME_SCORE);
+
         scoreView = (TextView) v.findViewById(R.id.txt_final_score_dlg);
         nameView = (EditText) v.findViewById(R.id.edt_final_score_name);
+
+        scoreView.setText("Your score: " + score);
 
         builder.setView(v)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -55,7 +63,7 @@ public class ScoreConfirmDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if(scoreView.getText().equals(""))
                             return;
-                        mListener.onDialogPositiveClick(ScoreConfirmDialog.this, nameView.getText().toString());
+                        mListener.onDialogPositiveClick(ScoreConfirmDialog.this, nameView.getText().toString(), score);
                     }
                 });
 

@@ -26,7 +26,7 @@ import com.vigursky.grushahit.R;
  */
 public class SpeedSelectionDialog extends DialogFragment {
 
-    private int currentSpeedVal = 1;
+    private int currentSpeedVal = 5;
     private SeekBar seekBar;
     private TextView speedValText;
     private SpeedSelectionDialogListener mListener;

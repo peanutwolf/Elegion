@@ -134,27 +134,28 @@ public class MainGameFragment extends Fragment implements PositionUpdater, Score
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, String name) {
-        ScoreSaver.saveScore(getActivity(), name, 1);
+    public void onDialogPositiveClick(DialogFragment dialog, String name, int score) {
+        ScoreSaver.saveScore(getActivity(), name, score);
         Intent intent = new Intent(getActivity(), GrushaMainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     private  class ScoreHandler extends Handler{
+        private int score = 0;
         public ScoreHandler(Looper looper) {
             super(looper);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            int score = 0;
             String type = "";
             Bundle scoreData = msg.getData();
 
             if(scoreData != null){
                 type = scoreData.getString(MainGameSurface.MSG_TYPE);
-                score = scoreData.getInt(MainGameSurface.GAME_SCORE);
+                if(scoreData.containsKey(MainGameSurface.GAME_SCORE))
+                    score = scoreData.getInt(MainGameSurface.GAME_SCORE);
             }
             switch (type){
                 case MainGameSurface.SCORE_UPDATE:
@@ -162,6 +163,7 @@ public class MainGameFragment extends Fragment implements PositionUpdater, Score
                     break;
                 case MainGameSurface.GAME_END:
                     DialogFragment dialog = new ScoreConfirmDialog();
+                    scoreData.putInt(MainGameSurface.GAME_SCORE, score);
                     dialog.setArguments(scoreData);
                     dialog.setTargetFragment(MainGameFragment.this, 0);
                     dialog.show(getFragmentManager(), "ScoreConfirmDialog");

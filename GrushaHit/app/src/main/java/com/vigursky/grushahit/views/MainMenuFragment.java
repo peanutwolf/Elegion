@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
+
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,7 +79,6 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
 
         return view;
     }
-
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int initialSpeed) {

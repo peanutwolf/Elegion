@@ -57,7 +57,7 @@ public class UserScoreAdapter extends RecyclerView.Adapter<UserScoreAdapter.User
         }
 
         public void onBind(@NonNull final UserModel userModel, int id){
-            userID.setText(String.valueOf(id));
+            userID.setText(String.valueOf(id + 1));
             userName.setText(userModel.getUserName());
             userScore.setText(String.valueOf(userModel.getUserScore()));
         }

@@ -21,8 +21,8 @@ import java.util.UUID;
 public class BTService extends IntentService {
 
     private  BluetoothAdapter mBluetoothAdapter = null;
-    private BluetoothDevice mBTDevice;
-    private  BluetoothSocket mSocket;
+    private static BluetoothDevice mBTDevice;
+    private  static BluetoothSocket mSocket;
     private  boolean started = true;
 
     private final IBinder mBinder = new BTServiceBinder();

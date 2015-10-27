@@ -19,7 +19,7 @@
         android:paddingLeft="10dp"
         android:layout_gravity="right"
         android:textSize="38dp"
-        android:text="00000"/>
+        android:text="Score: 0"/>
 
 
 
