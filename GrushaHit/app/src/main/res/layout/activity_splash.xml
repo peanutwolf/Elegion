@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/img_app_logo"
-        android:src="@drawable/snail_logo"
+        android:src="@drawable/crazy_snail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

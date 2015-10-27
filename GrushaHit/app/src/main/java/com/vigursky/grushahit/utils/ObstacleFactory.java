@@ -32,7 +32,7 @@ public class ObstacleFactory {
         this.obstaclesAreaWidth = obstaclesAreaWidth;
         this.obstaclesAreaHeight = obstaclesAreaHeight;
 
-        this.obstacleAreaOffset =obstaclesAreaHeight/40; // leave 30 percents of area between obstacles
+        this.obstacleAreaOffset =obstaclesAreaHeight/10; // leave 30 percents of area between obstacles
         this.obstacleMinWidth = obstaclesAreaWidth/10;
         this.obstacleMinHeight = obstaclesAreaHeight/10;
         this.obstacleMaxWidth = obstaclesAreaWidth/40;

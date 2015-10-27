@@ -38,8 +38,8 @@ public class MainCharacter {
         characterLeft = BitmapFactory.decodeResource(context.getResources(), R.drawable.snail_left);
         characterRight = BitmapFactory.decodeResource(context.getResources(), R.drawable.snail_right);
         speed = new Speed(0, 0);
-        x = 100;
-        y = 100;
+        x = 200;
+        y = 200;
     }
 
     public void update(){
