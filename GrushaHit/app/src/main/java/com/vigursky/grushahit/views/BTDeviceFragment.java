@@ -125,9 +125,9 @@ public class BTDeviceFragment extends Fragment implements BTDeviceAdapter.OnItem
                     dialog.setTitle(msg);
                 }
                 if(resultCode == Activity.RESULT_OK){
-                    dialog.create().show();
+                    dialog.setPositiveButton("OK", null).create().show();
                 }else if(resultCode == Activity.RESULT_CANCELED){
-                    dialog.setTitle("Error!").create().show();
+                    dialog.setPositiveButton("OK", null).setTitle("Error!").create().show();
                 }
             }
         }
