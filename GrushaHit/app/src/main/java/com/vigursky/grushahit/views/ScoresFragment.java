@@ -1,6 +1,7 @@
 package com.vigursky.grushahit.views;
 
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,11 +24,15 @@ public class ScoresFragment extends Fragment {
 
     private RecyclerView userScoreView;
     private UserScoreAdapter userScoreAdapter;
+    private Cursor cursor;
 
     public ScoresFragment() {
         // Required empty public constructor
     }
 
+    public void setCursor(Cursor cursor){
+        this.cursor = cursor;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +43,7 @@ public class ScoresFragment extends Fragment {
         userScoreView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-        userScoreAdapter = new UserScoreAdapter(ScoreSaver.getScoreList(getActivity()));
+        userScoreAdapter = new UserScoreAdapter(ScoreSaver.getScoreList(cursor));
         userScoreView.setAdapter(userScoreAdapter);
 
         return view;

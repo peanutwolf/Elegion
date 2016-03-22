@@ -1,7 +1,14 @@
 package com.vigursky.grushahit.utils;
 
 import android.app.Activity;
+import android.content.ContentProvider;
+import android.content.ContentProviderClient;
+import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 
 import com.vigursky.grushahit.models.UserModel;
@@ -14,24 +21,24 @@ import java.util.ListIterator;
  * Created by vigursky on 24.10.2015.
  */
 public class ScoreSaver {
+    private static final String AUTHORITY = "com.vigursky.mycontentprovider";
 
-    public static final String mScoreSize = "SCORE_STORAGE_SIZE";
-    public static final String mUserName = "SCORE_USER_NAME";
-    public static final String mScoreValue = "SCORE_VALUE";
+    private static final String BASE_PATH = "users";
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+            + "/" + BASE_PATH);
+    public static final String COLUMN_USER = "user";
+    public static final String COLUMN_SCORE = "score";
 
     public static void saveScore(Activity activity, String name, int score){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
-        SharedPreferences.Editor editor = sp.edit();
-        int size = sp.getInt(mScoreSize, 0)+1;
-
-        if(name.equals(""))
-            return;
-
-        editor.putString(mUserName + size, name);
-        editor.putInt(mScoreValue+size, score);
-        editor.putInt(mScoreSize, size);
-        editor.commit();
-
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER, name);
+        values.put(COLUMN_SCORE, score+"");
+        ContentProviderClient c= activity.getContentResolver().acquireContentProviderClient(CONTENT_URI);
+        try {
+            Uri uri = c.insert(CONTENT_URI, values);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String readString(Activity activity, String key, String defaultValue){
@@ -39,17 +46,20 @@ public class ScoreSaver {
         return sp.getString(key, defaultValue);
     }
 
-    public static List<UserModel> getScoreList(Activity activity){
+    public static List<UserModel> getScoreList(Cursor cursor){
         List<UserModel> scoreList = new ArrayList<>();
-        String name;
-        int score;
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
-        int size = sp.getInt(mScoreSize, 0);
 
-        for (int i = 1; i <= size; i++) {
-            name = sp.getString(mUserName + i, null);
-            score = sp.getInt(mScoreValue + i, 0);
-            scoreList.add(new UserModel(name, score));
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String user = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER));
+                String score = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SCORE));
+                cursor.moveToNext();
+                scoreList.add(new UserModel(user,new Integer(score)));
+            }
+
+            cursor.close();
         }
 
         return scoreList;

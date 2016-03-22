@@ -3,6 +3,10 @@ package com.vigursky.grushahit.views;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.vigursky.grushahit.R;
+import com.vigursky.grushahit.utils.ScoreSaver;
 import com.vigursky.grushahit.views.dialogs.SpeedSelectionDialog;
 
 /**
@@ -24,11 +29,16 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
     private Button gameButton;
     private Button btDeviceButton;
     private Button scoresButton;
+    private Cursor cursor;
 
     private static final String TAG = MainMenuFragment.class.getSimpleName();
 
     public MainMenuFragment() {
 
+    }
+
+    void swapCursor(Cursor cursor){
+        this.cursor = cursor;
     }
 
     @Override
@@ -69,13 +79,32 @@ public class MainMenuFragment extends Fragment implements SpeedSelectionDialog.S
             public void onClick(View v) {
                 Log.d(TAG, "btDeviceButton pressed");
                 FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                ScoresFragment fr = new ScoresFragment();
+                fr.setCursor(cursor);
 
-                ft.replace(R.id.main_view_fragment, new ScoresFragment());
+                ft.replace(R.id.main_view_fragment, fr);
                 ft.addToBackStack(null);
                 ft.commit();
             }
         });
 
+        Loader<Cursor> loader = getLoaderManager().initLoader(1, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                String[] projection = {ScoreSaver.COLUMN_USER, ScoreSaver.COLUMN_SCORE};
+                return new CursorLoader(getActivity(), ScoreSaver.CONTENT_URI, projection, null, null, null);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                ((MainMenuFragment)getFragmentManager().findFragmentById(R.id.main_view_fragment)).swapCursor(data);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+        });
 
         return view;
     }
